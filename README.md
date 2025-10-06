@@ -1,7 +1,7 @@
 # 🧾 Sales Data Analytics Dashboard (BigQuery)
 
 ## Project Overview
-This project uses **Google BigQuery** to clean and prepare a sales dataset covering **June 1, 2019 through January 1, 2020** for visualization in **Google Looker Studio**.  
+This project uses **Google BigQuery** to clean and prepare a sales dataset covering **Jan 1, 2019 through January 1, 2020** for visualization in **Google Looker Studio**.  
 The dataset captures seven months of transaction activity across major U.S. cities, allowing trend analysis of sales, margins, and product performance leading into the new year.
 
 🔗 **Live Dashboard:** [View on Looker Studio](https://lookerstudio.google.com/reporting/38e92f7a-6e6c-4cd4-8923-e8b01015def8)
@@ -28,4 +28,5 @@ Executed in **BigQuery** to generate the cleaned dataset used for visualization.
 | `Quantity Ordered` | Converted from text to integer for aggregation |
 | `Price Each`, `Cost price`, `turnover`, `margin` | Converted to numeric and formatted as USD currency |
 | `Purchase Address` | Retained for traceability and location parsing |
+
 

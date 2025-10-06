@@ -48,17 +48,26 @@ All transformations follow **BigQuery StandardSQL** and are documented in the `.
 
 ---
 
-## 🧮 Example SQL Snippet
+## 🧮 Example SQL Snippet and Explanation
+The following SQL block demonstrates the **core logic** used to calculate cost, turnover, and profit margin for each transaction.  
+Each expression converts text-based fields to numeric, applies cost factors, and standardizes values for dashboard use.
+
 ```sql
-ROUND(b.Price_Each * b.Quantity_Ordered * COALESCE(c.cost_factor, 1.00), 4) AS cost_price,
-ROUND(b.Price_Each * b.Quantity_Ordered, 2) AS turnover,
+-- Calculate estimated product cost using a mapped cost factor
 ROUND(
-  b.Price_Each * b.Quantity_Ordered
-  - b.Price_Each * b.Quantity_Ordered * COALESCE(c.cost_factor, 1.00), 4
+  b.Price_Each * b.Quantity_Ordered * COALESCE(c.cost_factor, 1.00),
+  4
+) AS cost_price,
+
+-- Compute total sales revenue before costs
+ROUND(
+  b.Price_Each * b.Quantity_Ordered,
+  2
+) AS turnover,
+
+-- Derive margin as the difference between revenue and estimated cost
+ROUND(
+  (b.Price_Each * b.Quantity_Ordered)
+  - (b.Price_Each * b.Quantity_Ordered * COALESCE(c.cost_factor, 1.00)),
+  4
 ) AS margin
-├── Dashboard_Screenshot.PNG          # Looker Studio dashboard preview
-├── Sales_Data.sql                    # BigQuery transformation script
-├── README.md                         # Project documentation
-└── sales_data_project.zip            # Compressed folder containing:
-    ├── sales_data.csv                # Raw dataset
-    └── sales_data post sql clean.csv # Cleaned dataset

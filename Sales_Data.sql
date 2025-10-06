@@ -6,7 +6,7 @@ WITH base AS (
     -- parse original datetime
     SAFE.PARSE_DATETIME('%m/%d/%Y %H:%M', `Order Date`) AS odt,
     *
-  FROM `project.dataset.dirty_sales_data_post_sql_clean`
+  FROM `project.sales_data.csv`
 )
 SELECT
   -- Order Date Clean as M/D/YYYY (no leading zeros)
@@ -37,3 +37,4 @@ SELECT
   CONCAT('$', FORMAT('%.2f', SAFE_CAST(`turnover`    AS NUMERIC)))              AS ` turnover `,
   CONCAT('$', FORMAT('%.2f', SAFE_CAST(`margin`      AS NUMERIC)))              AS ` margin `
 FROM base;
+

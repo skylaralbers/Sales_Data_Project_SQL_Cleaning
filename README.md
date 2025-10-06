@@ -1,61 +1,45 @@
-#  Sales Data Analytics Dashboard
+🧾 Sales Data Analytics Dashboard
+Project Overview
 
-##  Project Overview
-This project transforms a raw sales export into a clean, analysis-ready dataset and visualizes it using **Google Looker Studio**.  
-The goal is to simplify raw data into structured metrics that highlight product performance, sales trends, and profit margins across different U.S. cities.
+This project transforms a raw sales export into a clean, analysis-ready dataset and visualizes it using Google Looker Studio.
+The objective was to standardize text-based data, derive key performance metrics, and enrich the dataset with location fields for geographical insights.
 
-🔗 **Live Dashboard:** [View on Looker Studio](https://lookerstudio.google.com/reporting/38e92f7a-6e6c-4cd4-8923-e8b01015def8)
+🔗 Live Dashboard: View on Looker Studio
 
----
+Data Cleaning and Enrichment
+1. Source Data
 
-##  Data Cleaning and Enrichment
+Files: Contained within the ZIP archive sales_data_project.zip
 
-### 1. Source Data
-**Files:** Contained within the ZIP archive `sales_data_project.zip`
+sales_data.csv – raw export
 
-- `sales_data.csv` – raw export  
-- `sales_data post sql clean.csv` – cleaned and formatted dataset  
+sales_data post sql clean.csv – cleaned and formatted dataset
 
-Raw data included:
-- Combined date-time strings  
-- Single-line address fields  
-- Untyped numeric values  
+The raw dataset contained:
 
-### 2. Cleaning and Transformation
-**File:** `Sales_Data.sql`  
-Executed in **Google BigQuery** to create the cleaned dataset.
+Combined date-time strings
 
-| Transformation | Description |
-|----------------|-------------|
-| `Order_Date_Clean` | Extracted date only from timestamp (e.g., `"1/22/2019 21:25"` → `"2019-01-22"`) |
-| `City` | Extracted from `Purchase_Address` (e.g., `"944 Walnut St, Boston, MA 02215"` → `"Boston"`) |
-| `Purchase_State` | Parsed from `Purchase_Address` (e.g., `"MA"`) |
-| `Quantity_Ordered`, `Price_Each` | Converted from text to numeric values for analysis |
-| `cost_price`, `turnover`, `margin` | Derived using a temporary cost factor map per product |
-| `*_usd` fields | Added formatted USD versions of key numeric columns for dashboard display |
+Full address fields stored as single strings
 
-All transformations follow **BigQuery StandardSQL** and are documented in the `.sql` file.
+Numeric values stored as text
 
----
+2. Cleaning and Transformation
 
-##  Dashboard Features
-- **Turnover Trend:** Daily revenue visualization across 2019  
-- **Geographic View:** Map of order counts by city  
-- **Product Insights:** Top-performing products by turnover and margin  
-- **Interactive Filters:** Date and city selectors for dynamic exploration  
+File: Sales_Data.sql
+Executed in Google BigQuery to produce the cleaned dataset used for visualization.
 
-🔗 **Live Dashboard:** [View on Looker Studio](https://lookerstudio.google.com/reporting/38e92f7a-6e6c-4cd4-8923-e8b01015def8)
+Transformation	Description
+Order_Date_Clean	Parsed the timestamp into a date-only field for accurate time grouping.
+Price_Each, Quantity_Ordered	Converted text fields to numeric using SAFE_CAST for valid aggregation.
+Turnover	Computed as Price_Each * Quantity_Ordered to represent total sales revenue.
+Cost_Price	Estimated using a fixed cost factor (0.85) multiplied by total sales.
+Margin	Calculated as Turnover - Cost_Price to represent gross profit per order.
+Purchase_City, Purchase_State	Extracted from Purchase_Address using SPLIT and TRIM functions.
+*_usd fields	Formatted numeric columns as USD strings for dashboard display.
+
+All transformations were written in BigQuery StandardSQL and run against the loaded table
+project.dataset.dirty_sales_data_post_sql_clean.
 
 ---
 
-##  Example SQL Snippet and Explanation
-The following SQL block demonstrates the **core logic** used to calculate cost, turnover, and profit margin for each transaction.  
-Each expression converts text-based fields to numeric, applies cost factors, and standardizes values for dashboard use.
-
---Calculate estimated product cost using a mapped cost factor
-ROUND(b.Price_Each*b.Quantity_Ordered*COALESCE(c.cost_factor,1.00),4)AS cost_price,
---Compute total sales revenue before costs
-ROUND(b.Price_Each*b.Quantity_Ordered,2)AS turnover,
---Derive margin as the difference between revenue and estimated cost
-ROUND((b.Price_Each*b.Quantity_Ordered)-(b.Price_Each*b.Quantity_Ordered*COALESCE(c.cost_factor,1.00)),4)AS margin
 

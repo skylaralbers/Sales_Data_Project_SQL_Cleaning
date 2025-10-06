@@ -38,27 +38,5 @@ Executed in **Google BigQuery** to generate the final dataset for visualization.
 
 ---
 
-### Example BigQuery SQL
-```sql
-SELECT
-  Order_ID,
-  PARSE_DATE('%Y-%m-%d', Order_Date) AS Order_Date_Clean,
-  TRIM(Product) AS Product,
-  SAFE_CAST(Quantity_Ordered AS INT64) AS Quantity_Ordered,
-  SAFE_CAST(Price_Each AS NUMERIC) AS Price_Each,
-  ROUND(SAFE_CAST(Price_Each AS NUMERIC) * SAFE_CAST(Quantity_Ordered AS NUMERIC), 2) AS Turnover,
-  ROUND(SAFE_CAST(Price_Each AS NUMERIC) * SAFE_CAST(Quantity_Ordered AS NUMERIC) * 0.85, 2) AS Cost_Price,
-  ROUND(
-    (SAFE_CAST(Price_Each AS NUMERIC) * SAFE_CAST(Quantity_Ordered AS NUMERIC))
-    - (SAFE_CAST(Price_Each AS NUMERIC) * SAFE_CAST(Quantity_Ordered AS NUMERIC) * 0.85),
-    2
-  ) AS Margin,
-  TRIM(SPLIT(Purchase_Address, ',')[OFFSET(1)]) AS Purchase_City,
-  UPPER(TRIM(SPLIT(Purchase_Address, ',')[OFFSET(2)])) AS Purchase_State
-FROM
-  `project.dataset.dirty_sales_data_post_sql_clean`;
 
-  UPPER(TRIM(SPLIT(Purchase_Address, ',')[OFFSET(2)])) AS Purchase_State
-FROM
-  `project.dataset.dirty_sales_data_post_sql_clean`;
 

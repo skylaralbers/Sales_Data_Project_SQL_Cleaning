@@ -1,6 +1,6 @@
-# 🧾 Sales Data Analytics Dashboard
+#  Sales Data Analytics Dashboard
 
-## 📊 Project Overview
+##  Project Overview
 This project transforms a raw sales export into a clean, analysis-ready dataset and visualizes it using **Google Looker Studio**.  
 The goal is to simplify raw data into structured metrics that highlight product performance, sales trends, and profit margins across different U.S. cities.
 
@@ -8,7 +8,7 @@ The goal is to simplify raw data into structured metrics that highlight product 
 
 ---
 
-## 🧹 Data Cleaning and Enrichment
+##  Data Cleaning and Enrichment
 
 ### 1. Source Data
 **Files:** Contained within the ZIP archive `sales_data_project.zip`
@@ -38,7 +38,7 @@ All transformations follow **BigQuery StandardSQL** and are documented in the `.
 
 ---
 
-## 📈 Dashboard Features
+##  Dashboard Features
 - **Turnover Trend:** Daily revenue visualization across 2019  
 - **Geographic View:** Map of order counts by city  
 - **Product Insights:** Top-performing products by turnover and margin  
@@ -48,26 +48,14 @@ All transformations follow **BigQuery StandardSQL** and are documented in the `.
 
 ---
 
-## 🧮 Example SQL Snippet and Explanation
+##  Example SQL Snippet and Explanation
 The following SQL block demonstrates the **core logic** used to calculate cost, turnover, and profit margin for each transaction.  
 Each expression converts text-based fields to numeric, applies cost factors, and standardizes values for dashboard use.
 
-```sql
--- Calculate estimated product cost using a mapped cost factor
-ROUND(
-  b.Price_Each * b.Quantity_Ordered * COALESCE(c.cost_factor, 1.00),
-  4
-) AS cost_price,
+--Calculate estimated product cost using a mapped cost factor
+ROUND(b.Price_Each*b.Quantity_Ordered*COALESCE(c.cost_factor,1.00),4)AS cost_price,
+--Compute total sales revenue before costs
+ROUND(b.Price_Each*b.Quantity_Ordered,2)AS turnover,
+--Derive margin as the difference between revenue and estimated cost
+ROUND((b.Price_Each*b.Quantity_Ordered)-(b.Price_Each*b.Quantity_Ordered*COALESCE(c.cost_factor,1.00)),4)AS margin
 
--- Compute total sales revenue before costs
-ROUND(
-  b.Price_Each * b.Quantity_Ordered,
-  2
-) AS turnover,
-
--- Derive margin as the difference between revenue and estimated cost
-ROUND(
-  (b.Price_Each * b.Quantity_Ordered)
-  - (b.Price_Each * b.Quantity_Ordered * COALESCE(c.cost_factor, 1.00)),
-  4
-) AS margin

@@ -6,7 +6,7 @@ The dataset captures seven months of transaction activity across major U.S. citi
 
 🔗 **Live Dashboard:** [View on Looker Studio](https://lookerstudio.google.com/reporting/38e92f7a-6e6c-4cd4-8923-e8b01015def8)
 
-  Note: The dataset is large, so initial loading may take extra time. To improve performance, the default date range has been narrowed. You can adjust it using the date range picker on the dashboard.---
+  Note: The dataset is large, so initial loading may take extra time. To improve performance, the default date range has been narrowed. You can adjust it using the date range picker on the dashboard.
 
 ## Data Scope and Timeframe
 - **Dataset Period:** June 1, 2019 – January 1, 2020  
@@ -28,6 +28,7 @@ Executed in **BigQuery** to generate the cleaned dataset used for visualization.
 | `Quantity Ordered` | Converted from text to integer for aggregation |
 | `Price Each`, `Cost price`, `turnover`, `margin` | Converted to numeric and formatted as USD currency |
 | `Purchase Address` | Retained for traceability and location parsing |
+
 
 
 
